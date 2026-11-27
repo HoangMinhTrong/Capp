@@ -104,7 +104,7 @@ export function renderRoleAccountsHtml(role: string, selectedId: string): string
         <span style="font-size:11px;color:#8F8276">Bấm vào thẻ để chọn tài khoản</span>
       </div>
 
-      <div style="display:grid;grid-template-columns:${accounts.length === 1 ? '1fr' : (accounts.length === 2 ? 'repeat(2, 1fr)' : 'repeat(auto-fit, minmax(240px, 1fr))')};gap:10px">
+      <div style="display:grid;grid-template-columns:${accounts.length === 1 ? 'minmax(0, 1fr)' : 'repeat(auto-fit, minmax(min(220px, 100%), 1fr))'};gap:10px">
         ${accounts.map(acc => {
           const isSelected = acc.id === selectedId;
           return `
@@ -119,6 +119,7 @@ export function renderRoleAccountsHtml(role: string, selectedId: string): string
                 display:flex;
                 align-items:center;
                 gap:12px;
+                min-width:0;
                 padding:12px 14px;
                 border-radius:16px;
                 cursor:pointer;
