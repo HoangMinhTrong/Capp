@@ -44,6 +44,9 @@ Backend
 11. Backend CRASH khi chạy với database mới (lần deploy đầu tiên)
     -> đã sửa script tạo dữ liệu mẫu.
 
+ 8b. Trang đăng nhập: thẻ tài khoản thứ 2 (VD "Phạm Thị Dung") tràn ra ngoài
+    khung -> nay nằm gọn, chữ dài tự cắt "…"; trên điện thoại xếp 1 cột.
+
 Chuẩn bị deploy
 12. Bỏ địa chỉ gán cứng 127.0.0.1:8000 trong frontend.
 13. Backend tự phục vụ luôn trang web đã build (1 server duy nhất).
@@ -67,10 +70,22 @@ Chuẩn bị deploy
     của trình duyệt (báo cáo, nhật ký, file mẫu) — có thể xóa.
 
 ====================================================================
-4. FILE ĐÃ THAY ĐỔI
+4. DEPLOY
+====================================================================
+- Link app:  https://edutrack-s52f.onrender.com
+- Code:      https://github.com/HoangMinhTrong/Capp  (nhánh main)
+- Render: web service "edutrack", gói Free, Docker. Mỗi lần git push lên
+  main -> Render tự deploy lại (~30 giây).
+- Gói Free: app "ngủ" sau 15 phút không dùng (lần mở đầu chờ ~50 giây);
+  dữ liệu reset về bản mẫu mỗi lần khởi động lại/deploy.
+- Chỉ dùng làm DEMO (xem mục 3A, 3B).
+
+====================================================================
+5. FILE ĐÃ THAY ĐỔI
 ====================================================================
 src/pages/class-detail.ts, student-detail.ts, teachers.ts,
-src/pages/student-join-class.ts, src/state.ts, src/utils.ts, src/api.ts,
+src/pages/student-join-class.ts, src/pages/login.ts, src/state.ts, src/utils.ts, src/api.ts,
 src/data.ts, src/index.css (cuối file: khối CSS mobile),
 backend/main.py, backend/seed.py, backend/database.py,
-MỚI: Dockerfile, .dockerignore, backend/requirements.txt, BAO_CAO_QA.txt
+MỚI: Dockerfile, .dockerignore, render.yaml, backend/requirements.txt,
+     BAO_CAO_QA.txt
