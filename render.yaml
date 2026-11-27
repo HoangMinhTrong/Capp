@@ -1,0 +1,8 @@
+# Render Blueprint: one Docker web service (FastAPI API + built Vite SPA)
+services:
+  - type: web
+    name: edutrack
+    runtime: docker
+    plan: free
+    healthCheckPath: /api/health
+    autoDeploy: true

@@ -1,0 +1,7 @@
+node_modules
+dist
+scratch
+docs
+**/__pycache__
+*.md
+.git

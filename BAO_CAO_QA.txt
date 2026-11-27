@@ -1,0 +1,76 @@
+BÁO CÁO QA / QC & SỬA LỖI — EduTrack
+Ngày: 27/11/2026
+
+====================================================================
+1. ĐÃ TEST NHỮNG GÌ
+====================================================================
+- Cả 4 vai trò: Admin, Giảng viên, Trợ giảng, Học viên.
+- Mở mọi trang trên sidebar + trang chi tiết (lớp, học viên, giáo viên)
+  + đường dẫn sai mã -> bắt lỗi JS, chữ "undefined/NaN", ảnh hỏng.
+- Bấm thử ~90 nút trên các trang Admin (trừ nút xóa/khóa) -> không lỗi JS.
+- Form: tạo/xóa khóa học, mời giáo viên, đổi tên lớp, điều chỉnh lịch học,
+  đổi mật khẩu, góp ý, chấm bài, tham gia lớp bằng mã, giao bài/tạo quiz...
+  (thử để trống, dữ liệu sai, dữ liệu hợp lệ, chèn mã HTML độc).
+- Giao diện mobile (màn 390px) cho cả 4 vai trò.
+- Chạy thử bản production (1 server phục vụ cả web + API).
+- Dữ liệu test (DB + localStorage) đã được sao lưu trước và KHÔI PHỤC lại sau.
+
+====================================================================
+2. LỖI ĐÃ SỬA
+====================================================================
+Frontend
+ 1. Chi tiết lớp mở SAI lớp (bấm lớp nào cũng hiện "IELTS Lớp Tối").
+ 2. Mã học viên/lớp không tồn tại vẫn hiện người/lớp khác
+    -> nay hiện "Không tìm thấy".
+ 3. Trợ giảng bấm "Chấm bài" bị đá về Dashboard -> nay vào được,
+    chỉ chấm được lớp mình phụ trách (sửa cả backend).
+ 4. Mời giáo viên: chấp nhận email của giáo viên đã có tài khoản
+    và email thiếu tên miền (a@b) -> nay chặn.
+ 5. Thông báo (toast) không tự tắt, chồng lên nhau mãi -> nay mỗi cái tự tắt
+    sau 4 giây. Nội dung toast không còn chạy được mã HTML.
+ 6. Điều chỉnh lịch học: không lưu ngày kết thúc, cho phép ngày kết thúc
+    trước ngày bắt đầu, cho bỏ trống ngày học mà vẫn báo "thành công"
+    -> nay kiểm tra & lưu đúng.
+ 7. Ngày kết thúc lớp bị gán cứng "13/01/2027" cho mọi lớp -> nay lấy đúng dữ liệu.
+ 8. Mobile: mọi trang bị tràn ngang (rộng tới 1460px trên màn 390px)
+    -> nay vừa màn hình; bảng rộng cuộn ngang trong khung riêng.
+    (Chỉ áp dụng cho màn <= 768px, giao diện desktop không đổi.)
+
+Backend
+ 9. Mã lớp demo COMM82 / SELF91 (gợi ý sẵn trên trang "Vào lớp") báo
+    "không tồn tại" -> đã thêm 2 lớp này vào dữ liệu mẫu.
+10. Backend CRASH khi khởi động nếu admin từng đổi giảng viên lớp demo
+    -> đã sửa.
+11. Backend CRASH khi chạy với database mới (lần deploy đầu tiên)
+    -> đã sửa script tạo dữ liệu mẫu.
+
+Chuẩn bị deploy
+12. Bỏ địa chỉ gán cứng 127.0.0.1:8000 trong frontend.
+13. Backend tự phục vụ luôn trang web đã build (1 server duy nhất).
+14. Thêm: Dockerfile, .dockerignore, backend/requirements.txt,
+    biến môi trường EDUTRACK_DB_PATH (đường dẫn file database).
+
+====================================================================
+3. VẤN ĐỀ CÒN LẠI (CHƯA SỬA — CẦN BẠN QUYẾT ĐỊNH)
+====================================================================
+ A. [BẢO MẬT - QUAN TRỌNG] XSS: tên lớp/tên/tiêu đề do người dùng nhập được
+    chèn thẳng vào HTML (~200 chỗ). Đã chứng minh: đổi tên lớp thành mã độc
+    -> mã chạy ở 5 trang của người khác. Nội dung thông báo (rich text)
+    cũng lưu HTML thô. Sửa triệt để cần escape ~200 chỗ.
+ B. [BẢO MẬT - QUAN TRỌNG] Backend không có đăng nhập thật: "vai trò" do
+    trình duyệt tự khai (role=admin) nên ai gọi API cũng làm được mọi thứ.
+    Đổi mật khẩu cũng không hỏi mật khẩu cũ.
+    => Chỉ nên deploy làm DEMO, không dùng với dữ liệu thật.
+ C. API chấm điểm không kiểm tra điểm âm / vượt thang (frontend có chặn).
+ D. Tạo khóa học nhập "24 bài" nhưng thẻ hiện "1 bài" (chỉ tạo 1 bài mẫu).
+ E. Bấm thử nút trong lúc test đã tải vài file CSV mẫu vào thư mục Downloads
+    của trình duyệt (báo cáo, nhật ký, file mẫu) — có thể xóa.
+
+====================================================================
+4. FILE ĐÃ THAY ĐỔI
+====================================================================
+src/pages/class-detail.ts, student-detail.ts, teachers.ts,
+src/pages/student-join-class.ts, src/state.ts, src/utils.ts, src/api.ts,
+src/data.ts, src/index.css (cuối file: khối CSS mobile),
+backend/main.py, backend/seed.py, backend/database.py,
+MỚI: Dockerfile, .dockerignore, backend/requirements.txt, BAO_CAO_QA.txt
